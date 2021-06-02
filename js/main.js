@@ -8,18 +8,12 @@ function getRandomIntegral(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
-console.log('Случайное целое число: ' + getRandomIntegral(0, 5));
+getRandomIntegral(0, 5);
 
 
 //Функция для проверки максимальной длины строки
 
 function getLineLength(line) {
-  if (line.length <= 140) {
-    console.log('Проверяемая строка меньше или равна максимальной длине строки');
-    return true;
-  }
-  console.log('Проверяемая строка больше максимальной длины строки');
-  return false;
+  return line.length <= 140;
 }
-
 getLineLength('Проверяемая строка');
