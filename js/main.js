@@ -68,7 +68,7 @@ const getRandomComment = () => {
   }
 };
 
-const commentBlocks = new Array(COUNT_COMMENTS).fill(null).map(() => getRandomComment());
+const commentBlocks = new Array(COUNT_COMMENTS).fill(null).map(getRandomComment);
 
 const createPhoto = function () {
   return {
@@ -80,4 +80,4 @@ const createPhoto = function () {
   }
 };
 
-const photoBlocks = new Array(COUNT_PHOTO).fill(null).map(() => createPhoto());
+const photoBlocks = new Array(COUNT_PHOTO).fill(null).map(createPhoto);
