@@ -1,24 +1,20 @@
-// const { get } = require("browser-sync");
 //Функция возвращающая случайное целое число
 
-function getRandomIntegral(min, max) {
+const getRandomIntegral = (min, max) => {
   if (min < 0 || max < 0) {
-    throw new RangeError('Значение должно быть больше или равны нулю')
+    throw new RangeError('Значение должно быть больше или равны нулю');
   }
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
-}
+};
 getRandomIntegral(0, 5);
 
 
 //Функция для проверки максимальной длины строки
 
-function getLineLength(line) {
-  return line.length <= 140;
-}
+const getLineLength = (line) => line.length <= 140;
 getLineLength('Проверяемая строка');
-
 
 
 //Задание module4-task1
@@ -56,28 +52,28 @@ const MESSAGES = [
 ];
 
 const getRandomArrayElement = (elements) => {
-  return elements[getRandomIntegral(0, elements.length - 1)];
+  elements[getRandomIntegral(0, elements.length - 1)];
 };
 
 const getRandomComment = () => {
   return {
-    id: getRandomIntegral(1, 25) ,
-    avatar: 'img/avatar-' + getRandomIntegral(1, 6) + '.svg',
+    id: getRandomIntegral(1, 25),
+    avatar: `img/avatar-${getRandomIntegral(1, 6)}.svg`,
     message: getRandomArrayElement(MESSAGES),
     name: getRandomArrayElement(NAMES),
-  }
+  };
 };
 
 const commentBlocks = new Array(COUNT_COMMENTS).fill(null).map(getRandomComment);
 
-const createPhoto = function () {
+const createPhoto = () => {
   return {
-    id: getRandomIntegral(1, 25) ,
-    url: 'photos/' + getRandomIntegral(1, 25) + '.jpg',
+    id: getRandomIntegral(1, 25),
+    url: `photos/${getRandomIntegral(1, 25)}.jpg`,
     likes: getRandomIntegral(15, 200),
     description: getRandomArrayElement(DESCRITPIONS),
     comments: getRandomArrayElement(commentBlocks),
-  }
+  };
 };
 
 const photoBlocks = new Array(COUNT_PHOTO).fill(null).map(createPhoto);
