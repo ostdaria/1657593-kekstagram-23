@@ -56,24 +56,20 @@ const getRandomArrayElement = (elements) => {
 };
 
 const getRandomComment = () => {
-  return {
     id: getRandomIntegral(1, 25),
     avatar: `img/avatar-${getRandomIntegral(1, 6)}.svg`,
     message: getRandomArrayElement(MESSAGES),
     name: getRandomArrayElement(NAMES),
   };
-};
 
 const commentBlocks = new Array(COUNT_COMMENTS).fill(null).map(getRandomComment);
 
 const createPhoto = () => {
-  return {
     id: getRandomIntegral(1, 25),
     url: `photos/${getRandomIntegral(1, 25)}.jpg`,
     likes: getRandomIntegral(15, 200),
     description: getRandomArrayElement(DESCRITPIONS),
     comments: getRandomArrayElement(commentBlocks),
   };
-};
 
 const photoBlocks = new Array(COUNT_PHOTO).fill(null).map(createPhoto);
