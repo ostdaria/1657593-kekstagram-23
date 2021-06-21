@@ -1,5 +1,3 @@
-import {createPhotos} from './data.js';
-
 const picturesElement = document.querySelector('.pictures');
 const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
 
