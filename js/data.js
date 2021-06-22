@@ -54,4 +54,6 @@ const createPhoto = () => {
   };
 };
 
-const photoBlocks = new Array(COUNT_PHOTO).fill(null).map(createPhoto);
+const createPhotos = new Array(COUNT_PHOTO).fill(null).map(createPhoto);
+
+export {createPhotos};
