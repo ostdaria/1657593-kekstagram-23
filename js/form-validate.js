@@ -1,4 +1,4 @@
-import { isEscEvent } from "./utils";
+import { isEscEvent } from './utils.js';
 
 const uploadHashtag = document.querySelector('#upload-select-image');
 const userHashtags = document.querySelector('.text__hashtags');
@@ -43,7 +43,7 @@ userHashtags.addEventListener('input', () => {
 
 
 //Проверка длины комментария
-function validationComment(value) {
+function checkValidationComment(value) {
   const comment = value.trim();
   if (comment.length > MAX_COMMENT_LENGTH) {
     userComment.setCustomValidity(`Длина комментария не должна превышать ${MAX_COMMENT_LENGTH} символов`);

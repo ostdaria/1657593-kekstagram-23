@@ -43,3 +43,5 @@ buttonUploadForm.addEventListener('click', () => {
 buttonCloseForm.addEventListener('click', () => {
   closeUserModal();
 });
+
+export {body};

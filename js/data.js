@@ -42,7 +42,10 @@ const getRandomComment = () => {
   };
 };
 
-const commentBlocks = new Array(COUNT_COMMENTS).fill(null).map(getRandomComment);
+function createCommentBlocks () {
+  const commentBlocks = new Array(COUNT_COMMENTS).fill(null).map(getRandomComment);
+  return commentBlocks;
+}
 
 const createPhoto = () => {
   return {
@@ -54,6 +57,9 @@ const createPhoto = () => {
   };
 };
 
-const createPhotos = new Array(COUNT_PHOTO).fill(null).map(createPhoto);
+function createPhotos () {
+  const createDescriptionPhotos = new Array(COUNT_PHOTO).fill(null).map(createPhoto);
+  return createDescriptionPhotos;
+}
 
 export {createPhotos};
