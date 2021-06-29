@@ -10,13 +10,20 @@ const renderPicture = (picture) => {
   return pictureElement;
 };
 
+
 const renderPictures = (pictures) => {
   const fragment = document.createDocumentFragment();
   pictures.forEach((picture) => {
     const pictureElement = renderPicture(picture);
     fragment.appendChild(pictureElement);
   });
+
   listPicturesElement.appendChild(fragment);
 };
 
-export {renderPictures};
+//Функция очищает список
+const clearListPictureElement = () => {
+  listPicturesElement.innerHTML = '';
+};
+
+export {renderPictures, clearListPictureElement};

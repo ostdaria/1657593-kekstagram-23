@@ -34,8 +34,9 @@ const MESSAGES = [
 ];
 
 const getRandomComment = () => {
+  const commentID = getRandomIntegral(1, 25);
   return {
-    id: getRandomIntegral(1, 25),
+    id: commentID,
     avatar: `img/avatar-${getRandomIntegral(1, 6)}.svg`,
     message: getRandomArrayElement(MESSAGES),
     name: getRandomArrayElement(NAMES),
@@ -48,12 +49,13 @@ function createCommentBlocks () {
 }
 
 const createPhoto = () => {
+  const commentID = getRandomIntegral(1, 25);
   return {
-    id: getRandomIntegral(1, 25),
+    id: commentID,
     url: `photos/${getRandomIntegral(1, 25)}.jpg`,
     likes: getRandomIntegral(15, 200),
     description: getRandomArrayElement(DESCRITPIONS),
-    comments: getRandomArrayElement(commentBlocks),
+    comments: createCommentBlocks(),
   };
 };
 

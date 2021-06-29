@@ -1,6 +1,7 @@
 import {isEscEvent} from './utils.js';
+import {clearListPictureElement, renderPictures} from './pictures.js';
 
-const form = document.querySelector('.img-upload__form');
+// const form = document.querySelector('.img-upload__form');
 const buttonUploadForm = document.querySelector('#upload-file');
 const formOpen = document.querySelector('.img-upload__overlay');
 
@@ -18,6 +19,7 @@ const onPopupEscKeydown = (evt) => {
 
 //Объявление функции для показа формы
 function openUserModal () {
+  renderPictures();
   formOpen.classList.remove('hidden');
   body.classList.add('modal-open');
 
@@ -26,6 +28,7 @@ function openUserModal () {
 
 //Оъявление функции для скрытия формы
 function closeUserModal () {
+  clearListPictureElement();
   formOpen.classList.add('hidden');
   body.classList.remove('modal-open');
 
@@ -33,7 +36,7 @@ function closeUserModal () {
 }
 
 
-//Открытие формы при нажатии на логотип
+// Открытие формы при нажатии на логотип
 buttonUploadForm.addEventListener('click', () => {
   openUserModal();
 });

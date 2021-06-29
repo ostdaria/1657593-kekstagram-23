@@ -1,6 +1,6 @@
 import { isEscEvent } from './utils.js';
 
-const uploadHashtag = document.querySelector('#upload-select-image');
+// const uploadHashtag = document.querySelector('#upload-select-image');
 const userHashtags = document.querySelector('.text__hashtags');
 const userDescription = document.querySelector('.text__description');
 const userComment = document.querySelector('.social__footer-text');

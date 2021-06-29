@@ -15,19 +15,13 @@ const getLineLength = (line) => line.length <= 140;
 getLineLength('Проверяемая строка');
 
 
-const getRandomArrayElement = (elements) => {
-  elements[getRandomIntegral(0, elements.length - 1)];
-};
-
-export {getRandomIntegral, getLineLength, getRandomArrayElement};
+//Отдельная функция которая вбирает в себя логику по поиску случайного элемента в переданном массиве
+const getRandomArrayElement = (elements) => elements[getRandomIntegral(0, elements.length - 1)];
 
 
 //Функция проверки нажатия клавиши Esc
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 
-//Функуия проверки нажатия клавиши Enter
-const isEnterEvent = (evt) => evt.key === 'Enter';
-
-
+export {getRandomIntegral, getLineLength, getRandomArrayElement};
 export {isEscEvent};
