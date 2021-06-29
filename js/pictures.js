@@ -21,6 +21,7 @@ const renderPictures = (pictures) => {
   listPicturesElement.appendChild(fragment);
 };
 
+
 //Функция очищает список
 const clearListPictureElement = () => {
   listPicturesElement.innerHTML = '';
