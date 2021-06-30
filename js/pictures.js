@@ -1,3 +1,5 @@
+import { openBigPicture, onPictureEscKeydown} from './picture-big.js';
+
 const listPicturesElement = document.querySelector('.pictures');
 const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
 
@@ -6,6 +8,11 @@ const renderPicture = (picture) => {
   pictureElement.querySelector('.picture__img').src = picture.url;
   pictureElement.querySelector('.picture__likes').textContent = picture.likes;
   pictureElement.querySelector('.picture__comments').textContent = picture.comments;
+
+  pictureElement.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    openBigPicture(picture, onPictureEscKeydown);
+  });
 
   return pictureElement;
 };
@@ -22,9 +29,4 @@ const renderPictures = (pictures) => {
 };
 
 
-//Функция очищает список
-const clearListPictureElement = () => {
-  listPicturesElement.innerHTML = '';
-};
-
-export {renderPictures, clearListPictureElement};
+export {renderPictures};
