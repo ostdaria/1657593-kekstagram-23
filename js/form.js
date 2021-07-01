@@ -52,7 +52,7 @@ userModalOpenForm.addEventListener('click', () => {
 });
 
 
-//в обработчике используем наши функции закрытия
+//В обработчике используем наши функции закрытия
 userModalCloseForm.addEventListener('click', () => {
   closeUserModal();
 });
@@ -65,13 +65,13 @@ userModalOpenForm.addEventListener('change', () => {
 });
 
 
+//Праверка хэштегов
 const checkValidHashtags = (evt) => {
   evt.preventDefault();
-  //Метод toLowerCase() возвращает значение строки, на которой он был вызван; метод split возращает новый массив
-  const hashtags = userHashtags.value.toLowerCase().split('');
+  const hashtagArray = [];
 
-  //Метод trim удаляет пробелы с обоих концов строки; метод split возращает новый массив
-  const hashtagArray = userHashtags.value.trim().split('');
+  // //Метод toLowerCase() возвращает значение строки, на которой он был вызван; метод split возращает новый массив
+  const hashtags = userHashtags.value.toLowerCase().split(' ');
 
   if (hashtags.length > 5 ) {
     userHashtags.setCustomValidity(`Нельзя указывать больше ${MAX_HASHTAG_COUNT} хэштегов к фотографии`);
@@ -85,7 +85,7 @@ const checkValidHashtags = (evt) => {
     if (hashtags[i].length < 1) {
       userHashtags.setCustomValidity('');
     } else if (re.test(hashtags[i]) === false) {
-      userHashtags.setCustomValidity('Неверный параметр. Хэштег начинается с символа # (решётка) и состоять максимум из 20 букв и цифр');
+      userHashtags.setCustomValidity('Неверный параметр');
     } else if (hashtags[i].length > 20) {
       userHashtags.setCustomValidity(`Максимальная длина одного хэштега ${MAX_HASHTAG_LENGTH} символов, включая решётку`);
     } else if (hashtagArray.includes(hashtags[i])) {
@@ -93,11 +93,10 @@ const checkValidHashtags = (evt) => {
     } else if (!hashtagArray.includes(hashtags[i])) {
       hashtagArray.push(hashtags[i]);
     } else {userHashtags.setCustomValidity('');}
-
-    //reportValidity возвращает true если все дочерние элементы прошли проверку.
     userHashtags.reportValidity();
   }
 };
+
 userHashtags.addEventListener('input', checkValidHashtags);
 
 
