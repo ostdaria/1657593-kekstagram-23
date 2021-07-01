@@ -15,7 +15,6 @@ const commentsList = document.querySelector('.social__comments');
 const socialCommentCount = document.querySelector('.social__comment-count');
 const commentsLoader = document.querySelector('.comments-loader');
 
-
 let currentComments = [];
 
 
@@ -107,4 +106,4 @@ commentsLoader.addEventListener('click', () => {
 });
 
 
-export {openBigPicture, closeBigPicture, bigPictureButtonClose};
+export {openBigPicture, closeBigPicture, bigPictureButtonClose, onPictureEscKeydown};

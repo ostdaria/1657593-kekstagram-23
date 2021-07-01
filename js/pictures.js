@@ -1,4 +1,4 @@
-import { openBigPicture, onPictureEscKeydown} from './picture-big.js';
+import {openBigPicture, onPictureEscKeydown} from './picture-big.js';
 
 const listPicturesElement = document.querySelector('.pictures');
 const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');

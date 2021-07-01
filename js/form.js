@@ -5,19 +5,15 @@ const MAX_HASHTAG_LENGTH = 20;
 const MAX_COMMENT_LENGTH = 140;
 const re =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
-// const form = document.querySelector('.img-upload__form');
-const buttonUploadForm = document.querySelector('#upload-file');
-const formOpen = document.querySelector('.img-upload__overlay');
-
 const body = document.querySelector('body');
-const buttonCloseForm = document.querySelector('#upload__cancel');
-
-// const userModalOpenElement = document.querySelector('#upload-file');
+const formOpen = document.querySelector('.img-upload__overlay');
+const userModalOpenElement = document.querySelector('#upload-file');
+const buttonCloseForm = document.querySelector('#upload-cancel');
 const userHashtags = document.querySelector('.text__hashtags');
 const userComment = document.querySelector('.text__description');
-// const userComment = document.querySelector('.social__footer-text');
+// const userInputText = document.querySelector('.social__footer-text');
 
-
+//Записываем обработчик в переменную
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
@@ -38,7 +34,7 @@ function openUserModal () {
 
 //Оъявление функции для скрытия формы
 function closeUserModal () {
-  buttonUploadForm.value = '';
+  userModalOpenElement.value = '';
   userHashtags.value = '';
   userComment.value = '';
 
@@ -55,14 +51,14 @@ const uploadFileChangeHandler = () => {
   document.addEventListener('keydown', onPopupEscKeydown);
 };
 
-//Загрузrка обработчика нажатия кнопки отмены
+//Загрузка обработчика нажатия кнопки отмены
 const uploadCancelButtonClickHandler = () => {
   closeUserModal();
   document.addEventListener('keydown', onPopupEscKeydown);
 };
 
 
-buttonUploadForm.addEventListener('change', uploadFileChangeHandler);
+userModalOpenElement.addEventListener('change', uploadFileChangeHandler);
 
 //Закрытие формы
 buttonCloseForm.addEventListener('click', uploadCancelButtonClickHandler);
@@ -106,6 +102,7 @@ function checkValidationComment(value) {
     userComment.setCustomValidity(`Длина комментария не должна превышать ${MAX_COMMENT_LENGTH} символов`);
   } else {
     userComment.setCustomValidity('');
+    userComment.classList.remove('text__invalid');
   }
   userComment.reportValidity();
 }
@@ -114,6 +111,8 @@ function initFormValidation() {
   userHashtags.addEventListener('input', (evt) => {
     checkValidationComment(evt.target.value);
   });
+
+  //stopPropagation - прекращает передачу текущего события(при нажатии на кнопку'keydown')
   userHashtags.addEventListener('keydown', (evt) => evt.stopPropagation());
 
   userComment.addEventListener('input', (evt) => {
@@ -124,11 +123,10 @@ function initFormValidation() {
 }
 
 function initUserModal() {
-  buttonUploadForm.addEventListener('change', openUserModal);
+  userModalOpenElement.addEventListener('change', openUserModal);
   buttonCloseForm.addEventListener('click', closeUserModal);
   initFormValidation();
 }
 
 
-export {body};
-export {initUserModal};
+export {body, initUserModal};
