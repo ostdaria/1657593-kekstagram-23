@@ -1,25 +1,32 @@
-const picturesElement = document.querySelector('.pictures');
+import {openBigPicture, onPictureEscKeydown} from './picture-big.js';
+
+const listPicturesElement = document.querySelector('.pictures');
 const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
 
-const similarPictureFragment = document.createDocumentFragment();
-
-const renderPicture = ({url, likes, comments}) => {
+const renderPicture = (picture) => {
   const pictureElement = pictureTemplateElement.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = url;
-  pictureElement.querySelector('.picture__likes').textContent = likes;
-  pictureElement.querySelector('.picture__comments').textContent = comments.length;
-  similarPictureFragment.appendChild(pictureElement);
+  pictureElement.querySelector('.picture__img').src = picture.url;
+  pictureElement.querySelector('.picture__likes').textContent = picture.likes;
+  pictureElement.querySelector('.picture__comments').textContent = picture.comments;
+
+  pictureElement.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    openBigPicture(picture, onPictureEscKeydown);
+  });
 
   return pictureElement;
 };
 
+
 const renderPictures = (pictures) => {
   const fragment = document.createDocumentFragment();
   pictures.forEach((picture) => {
-    const picturesElement = renderPicture(picture);
-    fragment.appendChild(picturesElement);
+    const pictureElement = renderPicture(picture);
+    fragment.appendChild(pictureElement);
   });
-  picturesElement.appendChild(fragment);
+
+  listPicturesElement.appendChild(fragment);
 };
+
 
 export {renderPictures};

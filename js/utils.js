@@ -1,5 +1,4 @@
 //Функция возвращающая случайное целое число
-
 const getRandomIntegral = (min, max) => {
   if (min < 0 || max < 0) {
     throw new RangeError('Значение должно быть больше или равны нулю');
@@ -12,13 +11,16 @@ getRandomIntegral(0, 5);
 
 
 //Функция для проверки максимальной длины строки
-
-const getLineLength = (line) => line.length <= 140;
-getLineLength('Проверяемая строка');
+const isValidString = (string, maxLength) => string.length <= maxLength;
 
 
-const getRandomArrayElement = (elements) => {
-  elements[getRandomIntegral(0, elements.length - 1)];
-};
+//Отдельная функция которая вбирает в себя логику по поиску случайного элемента в переданном массиве
+const getRandomArrayElement = (elements) => elements[getRandomIntegral(0, elements.length - 1)];
 
-export {getRandomIntegral, getLineLength, getRandomArrayElement};
+
+//Функция проверки нажатия клавиши Esc
+const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
+
+export {getRandomIntegral, getRandomArrayElement};
+export {isEscEvent, isValidString};

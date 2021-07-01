@@ -34,26 +34,34 @@ const MESSAGES = [
 ];
 
 const getRandomComment = () => {
+  const commentID = getRandomIntegral(1, 25);
   return {
-    id: getRandomIntegral(1, 25),
+    id: commentID,
     avatar: `img/avatar-${getRandomIntegral(1, 6)}.svg`,
     message: getRandomArrayElement(MESSAGES),
     name: getRandomArrayElement(NAMES),
   };
 };
 
-const commentBlocks = new Array(COUNT_COMMENTS).fill(null).map(getRandomComment);
+function createCommentBlocks () {
+  const commentBlocks = new Array(COUNT_COMMENTS).fill(null).map(getRandomComment);
+  return commentBlocks;
+}
 
 const createPhoto = () => {
+  const commentID = getRandomIntegral(1, 25);
   return {
-    id: getRandomIntegral(1, 25),
+    id: commentID,
     url: `photos/${getRandomIntegral(1, 25)}.jpg`,
     likes: getRandomIntegral(15, 200),
     description: getRandomArrayElement(DESCRITPIONS),
-    comments: getRandomArrayElement(commentBlocks),
+    comments: createCommentBlocks(),
   };
 };
 
-const createPhotos = new Array(COUNT_PHOTO).fill(null).map(createPhoto);
+function createPhotos () {
+  const createDescriptionPhotos = new Array(COUNT_PHOTO).fill(null).map(createPhoto);
+  return createDescriptionPhotos;
+}
 
 export {createPhotos};
