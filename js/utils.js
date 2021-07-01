@@ -11,8 +11,7 @@ getRandomIntegral(0, 5);
 
 
 //Функция для проверки максимальной длины строки
-const getLineLength = (line) => line.length <= 140;
-getLineLength('Проверяемая строка');
+const isValidString = (string, maxLength) => string.length <= maxLength;
 
 
 //Отдельная функция которая вбирает в себя логику по поиску случайного элемента в переданном массиве
@@ -23,5 +22,5 @@ const getRandomArrayElement = (elements) => elements[getRandomIntegral(0, elemen
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 
-export {getRandomIntegral, getLineLength, getRandomArrayElement};
-export {isEscEvent};
+export {getRandomIntegral, getRandomArrayElement};
+export {isEscEvent, isValidString};

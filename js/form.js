@@ -1,4 +1,4 @@
-import {isEscEvent} from './utils.js';
+import {isEscEvent, isValidString} from './utils.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
@@ -7,11 +7,12 @@ const re =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
 const body = document.querySelector('body');
 const formOpen = document.querySelector('.img-upload__overlay');
-const userModalOpenElement = document.querySelector('#upload-file');
-const buttonCloseForm = document.querySelector('#upload-cancel');
+const userModalOpenForm = document.querySelector('#upload-file');
+const userModalCloseForm = document.querySelector('#upload-cancel');
 const userHashtags = document.querySelector('.text__hashtags');
 const userComment = document.querySelector('.text__description');
 // const userInputText = document.querySelector('.social__footer-text');
+
 
 //Записываем обработчик в переменную
 const onPopupEscKeydown = (evt) => {
@@ -34,7 +35,7 @@ function openUserModal () {
 
 //Оъявление функции для скрытия формы
 function closeUserModal () {
-  userModalOpenElement.value = '';
+  userModalOpenForm.value = '';
   userHashtags.value = '';
   userComment.value = '';
 
@@ -45,88 +46,71 @@ function closeUserModal () {
 }
 
 
-//Загрузка обработчика изменения файла
-const uploadFileChangeHandler = () => {
+//в обработчике используем наши функции открытия
+userModalOpenForm.addEventListener('click', () => {
   openUserModal();
-  document.addEventListener('keydown', onPopupEscKeydown);
-};
-
-//Загрузка обработчика нажатия кнопки отмены
-const uploadCancelButtonClickHandler = () => {
-  closeUserModal();
-  document.addEventListener('keydown', onPopupEscKeydown);
-};
-
-
-userModalOpenElement.addEventListener('change', uploadFileChangeHandler);
-
-//Закрытие формы
-buttonCloseForm.addEventListener('click', uploadCancelButtonClickHandler);
-
-
-//Праверка хэштегов
-userHashtags.addEventListener('input', () => {
-  const hashtagsArray = userHashtags.value.trim().split('');
-  const lowerHastagsArray = userHashtags.value.trim().toLowerCase().split('').sort();
-
-  userHashtags.forEach((element) => {
-    if (hashtagsArray.length > MAX_HASHTAG_COUNT) {
-      return userHashtags.setCustomValidity(`Нельзя указывать больше ${MAX_HASHTAG_COUNT} хэштегов к фотографии`);
-    }
-    if (element.length === 1) {
-      return userHashtags.setCustomValidity('Хэштег не может состоять только из одной решетки');
-    }
-    if (!re.test(element)) {
-      return userHashtags.setCustomValidity('Хэштег начинается с символа # (решётка) и состоять максимум из 20 букв и цифр');
-    }
-    if (element.length > MAX_HASHTAG_LENGTH) {
-      return userHashtags.setCustomValidity(`Максимальная длина одного хэштега ${MAX_HASHTAG_LENGTH} символов, включая решётку`);
-    }
-    return userHashtags.setCustomValidity('');
-  });
-
-  lowerHastagsArray.forEach((element, index) => {
-    if (lowerHastagsArray[index] === lowerHastagsArray[index + 1]) {
-      return userHashtags.setCustomValidity('Один и тот же хэштег не может быть использован дважды. Хэштеги нечувствительны к регистру');
-    }
-  });
-
-  userHashtags.reportValidity();
 });
 
 
+//в обработчике используем наши функции закрытия
+userModalCloseForm.addEventListener('click', () => {
+  closeUserModal();
+});
+
+
+userModalOpenForm.addEventListener('change', () => {
+  formOpen.classList.remove('hidden');
+  body.classList.add('modal-open');
+  body.addEventListener('keydown', onPopupEscKeydown);
+});
+
+
+const checkValidHashtags = (evt) => {
+  evt.preventDefault();
+  //Метод toLowerCase() возвращает значение строки, на которой он был вызван; метод split возращает новый массив
+  const hashtags = userHashtags.value.toLowerCase().split('');
+
+  //Метод trim удаляет пробелы с обоих концов строки; метод split возращает новый массив
+  const hashtagArray = userHashtags.value.trim().split('');
+
+  if (hashtags.length > 5 ) {
+    userHashtags.setCustomValidity(`Нельзя указывать больше ${MAX_HASHTAG_COUNT} хэштегов к фотографии`);
+  }  else if (hashtags.length < 1) {
+    userHashtags.setCustomValidity('');
+  }  else { userHashtags.setCustomValidity('');
+  }
+  userHashtags.reportValidity();
+
+  for (let i = 0; i < hashtags.length; i++) {
+    if (hashtags[i].length < 1) {
+      userHashtags.setCustomValidity('');
+    } else if (re.test(hashtags[i]) === false) {
+      userHashtags.setCustomValidity('Неверный параметр. Хэштег начинается с символа # (решётка) и состоять максимум из 20 букв и цифр');
+    } else if (hashtags[i].length > 20) {
+      userHashtags.setCustomValidity(`Максимальная длина одного хэштега ${MAX_HASHTAG_LENGTH} символов, включая решётку`);
+    } else if (hashtagArray.includes(hashtags[i])) {
+      userHashtags.setCustomValidity('Один и тот же хэштег не может быть использован дважды. Хэштеги нечувствительны к регистру');
+    } else if (!hashtagArray.includes(hashtags[i])) {
+      hashtagArray.push(hashtags[i]);
+    } else {userHashtags.setCustomValidity('');}
+
+    //reportValidity возвращает true если все дочерние элементы прошли проверку.
+    userHashtags.reportValidity();
+  }
+};
+userHashtags.addEventListener('input', checkValidHashtags);
+
+
 //Проверка длины комментария
-function checkValidationComment(value) {
-  const comment = value.trim();
-  if (comment.length > MAX_COMMENT_LENGTH) {
+userComment.addEventListener('input', () => {
+  if (isValidString(userComment.value, MAX_COMMENT_LENGTH) === false) {
     userComment.setCustomValidity(`Длина комментария не должна превышать ${MAX_COMMENT_LENGTH} символов`);
+    userComment.style.border = '2px solid red';
   } else {
     userComment.setCustomValidity('');
-    userComment.classList.remove('text__invalid');
+    userComment.style.border = 'none';
   }
   userComment.reportValidity();
-}
+});
 
-function initFormValidation() {
-  userHashtags.addEventListener('input', (evt) => {
-    checkValidationComment(evt.target.value);
-  });
-
-  //stopPropagation - прекращает передачу текущего события(при нажатии на кнопку'keydown')
-  userHashtags.addEventListener('keydown', (evt) => evt.stopPropagation());
-
-  userComment.addEventListener('input', (evt) => {
-    checkValidationComment(evt.target.value);
-  });
-
-  userComment.addEventListener('keydown', (evt) => evt.stopPropagation());
-}
-
-function initUserModal() {
-  userModalOpenElement.addEventListener('change', openUserModal);
-  buttonCloseForm.addEventListener('click', closeUserModal);
-  initFormValidation();
-}
-
-
-export {body, initUserModal};
+export {body};

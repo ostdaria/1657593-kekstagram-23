@@ -52,6 +52,7 @@ const createMoreCommentsFragment = () => {
   createComments(currentComments.slice(showCommentsCount, showCommentsCount + COMMENTS_LOAD_STEP));
 
   const numberComments = document.querySelectorAll('.social__comment').length;
+  //Если все комментарии показаны кнопку comments-loader скрываем добавив класс hidden
   if (numberComments === currentComments.length) {
     commentsLoader.classList.add('hidden');
   } else {
@@ -83,6 +84,9 @@ const openBigPicture = (data) => {
 
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
+
+  socialCommentCount.classList.remove('hidden');
+  commentsLoader.classList.remove('hidden');
   document.addEventListener('keydown', onPictureEscKeydown);
 };
 
@@ -100,7 +104,7 @@ bigPictureButtonClose.addEventListener('click', () => {
   closeBigPicture();
 });
 
-//Загрузка новых комментарий при нажатии на кнопку
+//Загрузка не более 5 новых комментариева при нажатии на кнопку 'Загрузить еще'
 commentsLoader.addEventListener('click', () => {
   createMoreCommentsFragment();
 });
