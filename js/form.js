@@ -1,8 +1,10 @@
 import {isEscEvent, isValidString} from './utils.js';
+import {getPictureScale} from './scale-control.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_COMMENT_LENGTH = 140;
+const DEFAULT_SCALE_VALUE = 100;
 const re =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
 const body = document.querySelector('body');
@@ -41,6 +43,7 @@ function closeUserModal () {
 
   formOpen.classList.add('hidden');
   body.classList.remove('modal-open');
+  getPictureScale(DEFAULT_SCALE_VALUE);
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 }

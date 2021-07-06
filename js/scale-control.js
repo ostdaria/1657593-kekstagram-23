@@ -9,10 +9,10 @@ const picturePreview = document.querySelector('.img-upload__preview');
 
 let currentScale = 100;
 
-const getPictureScale = (newScale) => {
-  scalelValue.value = `${newScale}%`;
-  picturePreview.style = `transform: scale(${newScale / 100})`;
-  currentScale = newScale;
+const getPictureScale = (value) => {
+  scalelValue.value = `${value}%`;
+  picturePreview.style.transform = `scale(${value / 100})`;
+  currentScale = value;
 };
 
 const minusButtonClickHandler = () => {
@@ -31,3 +31,6 @@ const plusButtonClickHandler = () => {
 
 minusButton.addEventListener('click', minusButtonClickHandler);
 plusButton.addEventListener('click', plusButtonClickHandler);
+
+
+export {picturePreview, getPictureScale};
