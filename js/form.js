@@ -1,5 +1,6 @@
 import {isEscEvent, isValidString} from './utils.js';
 import {getPictureScale} from './scale-control.js';
+// import {resetUploadEdit} from './edditor-picture.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
@@ -44,6 +45,7 @@ function closeUserModal () {
   formOpen.classList.add('hidden');
   body.classList.remove('modal-open');
   getPictureScale(DEFAULT_SCALE_VALUE);
+  // resetUploadEdit();
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
