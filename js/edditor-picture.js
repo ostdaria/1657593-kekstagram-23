@@ -5,8 +5,9 @@ const sliderElement = document.querySelector('.effect-level__slider');
 const sliderWrapper = document.querySelector('.img-upload__effect-level');
 const effectsForm = document.querySelector('.img-upload__effects');
 
+
 const effects = {
-  chrome: {
+  'effect-chrome': {
     name: 'grayscale',
     htmlClass: 'effects__preview--chrome',
     unit: '',
@@ -15,7 +16,7 @@ const effects = {
     step: 0.1,
     start: 1,
   },
-  sepia: {
+  'effect-sepia': {
     name: 'sepia',
     htmlClass: 'effects__preview--sepia',
     unit: '',
@@ -24,7 +25,7 @@ const effects = {
     step: 0.1,
     start: 1,
   },
-  marvin: {
+  'effect-marvin': {
     name: 'invert',
     htmlClass: 'effects__preview--marvin',
     unit: '%',
@@ -33,7 +34,7 @@ const effects = {
     step: 1,
     start: 100,
   },
-  phobos: {
+  'effect-phobos': {
     name: 'blur',
     htmlClass: 'effects__preview--phobos',
     unit: 'px',
@@ -42,7 +43,7 @@ const effects = {
     step: 0.1,
     start: 3,
   },
-  heat: {
+  'effect-heat': {
     name: 'brightness',
     htmlClass: 'effects__preview--heat',
     unit: '',
@@ -52,6 +53,7 @@ const effects = {
     start: 3,
   },
 };
+
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -99,34 +101,21 @@ const sliderOptionsHandler = (minValue, maxValue, startValue, stepValue) => {
   });
 };
 
-//Инструкция switch сравнивает выражение со случаями,
-//перечисленными внутри неё, а затем выполняет соответствующие инструкции.
-effectsForm.addEventListener('click', (evt) => {
-  switch (evt.target.id) {
-    case ('effect-none'):
-      picturePreview.classList = 'img-upload__preview';
-      sliderWrapper.classList.add('visually-hidden');
-      picturePreview.style.filter = 'none';
-      break;
-    case ('effect-chrome'):
-      showEffect(effects.chrome.htmlClass, effects.chrome.name, effects.chrome.unit);
-      sliderOptionsHandler(effects.chrome.min, effects.chrome.max, effects.chrome.start, effects.chrome.step);
-      break;
-    case ('effect-sepia'):
-      showEffect(effects.sepia.htmlClass, effects.sepia.name, effects.sepia.unit);
-      sliderOptionsHandler(effects.sepia.min, effects.sepia.max, effects.sepia.start, effects.sepia.step);
-      break;
-    case ('effect-marvin'):
-      showEffect(effects.marvin.htmlClass, effects.marvin.name, effects.marvin.unit);
-      sliderOptionsHandler(effects.marvin.max, effects.marvin.min, effects.marvin.start, effects.marvin.step);
-      break;
-    case ('effect-phobos'):
-      showEffect(effects.phobos.htmlClass, effects.phobos.name, effects.phobos.unit);
-      sliderOptionsHandler(effects.phobos.max, effects.phobos.min, effects.phobos.start, effects.phobos.step);
-      break;
-    case ('effect-heat'):
-      showEffect(effects.heat.htmlClass, effects.heat.name, effects.heat.unit);
-      sliderOptionsHandler(effects.heat.max, effects.heat.min, effects.heat.start, effects.heat.step);
-      break;
+
+const onFilterChange = (evt) => {
+  const effectId = evt.target.id;
+  if (effectId === 'effect--none') {
+    picturePreview.classList = 'img-upload__preview';
+    sliderWrapper.classList.add('visually-hidden');
+    picturePreview.style.filter = 'none';
+    return;
   }
-});
+
+  const effect = effects[effectId];
+  if (effect) {
+    showEffect(effect.htmlClass, effect.name, effect.unit);
+    sliderOptionsHandler(effect.min, effect.max, effect.start, effect.step);
+  }
+};
+
+effectsForm.addEventListener('click', onFilterChange);
