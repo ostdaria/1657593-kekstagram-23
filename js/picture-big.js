@@ -1,7 +1,6 @@
 import {body} from './form.js';
 import {isEscEvent} from './utils.js';
 
-// const MAX_COUNT_SHOW_COMMENT = 5;
 const COMMENTS_LOAD_STEP = 5;
 const AVATAR_SIZE = 35;
 
@@ -90,13 +89,14 @@ const openBigPicture = (data) => {
   document.addEventListener('keydown', onPictureEscKeydown);
 };
 
+
 //Закрытие окна с фото
-const closeBigPicture = () => {
+function closeBigPicture () {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onPictureEscKeydown);
-};
+}
 
 
 //Закрытие окна при клике на иконку

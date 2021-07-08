@@ -1,6 +1,5 @@
 import {isEscEvent, isValidString} from './utils.js';
 import {getPictureScale} from './scale-control.js';
-// import {resetUploadEdit} from './edditor-picture.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
@@ -14,7 +13,6 @@ const userModalOpenForm = document.querySelector('#upload-file');
 const userModalCloseForm = document.querySelector('#upload-cancel');
 const userHashtags = document.querySelector('.text__hashtags');
 const userComment = document.querySelector('.text__description');
-// const userInputText = document.querySelector('.social__footer-text');
 
 
 //Записываем обработчик в переменную
@@ -45,7 +43,6 @@ function closeUserModal () {
   formOpen.classList.add('hidden');
   body.classList.remove('modal-open');
   getPictureScale(DEFAULT_SCALE_VALUE);
-  // resetUploadEdit();
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 }

@@ -7,7 +7,7 @@ const getRandomIntegral = (min, max) => {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 };
-getRandomIntegral(0, 5);
+// getRandomIntegral(0, 5);
 
 
 //Функция для проверки максимальной длины строки
