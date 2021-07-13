@@ -1,5 +1,6 @@
 import {isEscEvent, isValidString} from './utils.js';
 import {getPictureScale} from './scale-control.js';
+import {sendData} from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
@@ -13,6 +14,13 @@ const userModalOpenForm = document.querySelector('#upload-file');
 const userModalCloseForm = document.querySelector('#upload-cancel');
 const userHashtags = document.querySelector('.text__hashtags');
 const userComment = document.querySelector('.text__description');
+const userForm = document.querySelector('.img-upload__form');
+
+// const uploadImageForm = document.querySelector('#upload-select-image');
+const successPopup = document.querySelector('#success').content.querySelector('.success');
+const successButton = successPopup.querySelector('.success__button');
+const errorPopup = document.querySelector('#error').content.querySelector('.error');
+const errorButton = errorPopup.querySelector('.error__button');
 
 
 //Записываем обработчик в переменную
@@ -57,13 +65,6 @@ userModalOpenForm.addEventListener('click', () => {
 //В обработчике используем наши функции закрытия
 userModalCloseForm.addEventListener('click', () => {
   closeUserModal();
-});
-
-
-userModalOpenForm.addEventListener('change', () => {
-  formOpen.classList.remove('hidden');
-  body.classList.add('modal-open');
-  body.addEventListener('keydown', onPopupEscKeydown);
 });
 
 
@@ -113,5 +114,52 @@ userComment.addEventListener('input', () => {
   }
   userComment.reportValidity();
 });
+
+
+const removeEventListeners = (event) => {
+  document.removeEventListener('click', event);
+  document.removeEventListener('keydown', event);
+};
+
+const popupEventsHandler = (evt) => {
+  if (isEscEvent(evt)) {
+    document.body.lastChild.remove();
+    removeEventListeners(popupEventsHandler);
+  } else if (evt.target === document.body.lastChild) {
+    document.body.lastChild.remove();
+    removeEventListeners(popupEventsHandler);
+  }
+};
+
+const popupClickHandler = () => {
+  document.body.lastChild.remove();
+  removeEventListeners(popupEventsHandler);
+};
+
+const popupOpenHandler = (template, button) => {
+  closeUserModal();
+  document.body.append(template);
+
+  document.removeEventListener('keydown', onPopupEscKeydown);
+
+  button.addEventListener('click', popupClickHandler);
+  document.addEventListener('keydown', popupEventsHandler);
+  document.addEventListener('click', popupEventsHandler);
+};
+
+const setUserFormSubmit = () => {
+  userForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => popupOpenHandler(successPopup, successButton),
+      () => popupOpenHandler(errorPopup, errorButton),
+      new FormData(evt.target),
+    );
+  });
+};
+
+setUserFormSubmit();
+
 
 export {body};
