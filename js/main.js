@@ -1,10 +1,18 @@
 import './form.js';
-// import {createPhotos} from './data.js';
+import {setUserFormSubmit} from './form.js';
 import './utils.js';
-// import {renderPictures} from './pictures.js';
 import './pictures.js';
 import './picture-big.js';
 import './scale-control.js';
 import './edditor-picture.js';
+import {renderPictures, showAlert} from './pictures.js';
+import {getData} from './api.js';
 
-// renderPictures(createPhotos());
+const dataPromise = getData(() => showAlert('Не удалось получить данные с сервера. Попробуйте ещё раз.'));
+
+dataPromise.then((data) => {
+  renderPictures(data);
+  showAlert();
+});
+
+setUserFormSubmit();

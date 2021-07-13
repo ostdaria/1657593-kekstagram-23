@@ -1,17 +1,11 @@
+import { getData } from './api.js';
 import {openBigPicture, onPictureEscKeydown} from './picture-big.js';
-import {debounce} from './utils.js';
-import {getData} from './api.js';
 
-const RERENDER_DELAY = 500;
-const RANDOM_PHOTOS_ARRAY_LENGTH = 10;
+const ALERT_SHOW_TIME = 5000;
 
 const listPicturesElement = document.querySelector('.pictures');
 const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
 
-const filtersForm = document.querySelector('.img-filters__form');
-const defaultPicturesButton = filtersForm.querySelector('#filter-default');
-const randomPicturesButton = filtersForm.querySelector('#filter-random');
-const discussedPhotosButton = filtersForm.querySelector('#filter-discussed');
 
 const renderPicture = (picture) => {
   const pictureElement = pictureTemplateElement.cloneNode(true);
@@ -39,82 +33,32 @@ const renderPictures = (pictures) => {
 };
 
 
-const shuffle = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = 100;
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = 0;
+  alertContainer.style.top = 0;
+  alertContainer.style.right = 0;
+  alertContainer.style.padding = '10px 10px';
+  alertContainer.style.fontSize = '20px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
 };
-
-const generateRandomPhotosArray = (defaultArray) => {
-  const newCommentsArray = defaultArray.slice(0);
-
-  return shuffle(newCommentsArray).slice(0, RANDOM_PHOTOS_ARRAY_LENGTH);
-};
-
-const sortPhotosArray = (defaultArray) => {
-  const discussedPhotosArray = defaultArray.slice(0);
-
-  discussedPhotosArray.sort((a, b) => b.comments.length - a.comments.length);
-
-  return discussedPhotosArray;
-};
-
-const filterButtonsClickHandler = (classRemove, classRemoveSecond, classAdd) => {
-  classRemove.classList.remove('img-filters__button--active');
-  classRemoveSecond.classList.remove('img-filters__button--active');
-  classAdd.classList.add('img-filters__button--active');
-};
-
-const createPictures = (debounce(
-  (photosArray) => {
-    listPicturesElement.querySelectorAll('.picture').forEach((photo) => {
-      photo.remove();
-    });
-    const photosListFragment = renderPictures(photosArray, pictureTemplateElement);
-
-    listPicturesElement.appendChild(photosListFragment);
-  },
-  RERENDER_DELAY,
-));
 
 
 getData(
   (photos) => {
-    const photosListFragment = renderPicture(photos, pictureTemplateElement);
+    const photosListFragment = renderPictures(photos, pictureTemplateElement);
     listPicturesElement.appendChild(photosListFragment);
-    document.querySelector('.img-filters').classList.remove('img-filters--inactive');
-
-    filtersForm.addEventListener('click', (evt) => {
-      switch (evt.target.id) {
-        case ('filter-default'):
-          filterButtonsClickHandler(randomPicturesButton, discussedPhotosButton, defaultPicturesButton);
-          createPictures(photos);
-          break;
-        case ('filter-random'):
-          filterButtonsClickHandler(defaultPicturesButton, discussedPhotosButton, randomPicturesButton);
-          createPictures(generateRandomPhotosArray(photos));
-          break;
-        case ('filter-discussed'):
-          filterButtonsClickHandler(randomPicturesButton, defaultPicturesButton, discussedPhotosButton);
-          createPictures(sortPhotosArray(photos));
-          break;
-      }
-    });
-  },
-  (err) => {
-    const errorDiv = document.createElement('div');
-    document.body.prepend(errorDiv);
-    errorDiv.textContent = `Данные не загрузились, ${err}`;
-    errorDiv.style.textAlign = 'center';
-    errorDiv.style.color = 'red';
-    errorDiv.style.fontSize = '30px';
-    errorDiv.style.marginTop = '30px';
-    errorDiv.addEventListener('click', () => {
-      document.body.removeChild(errorDiv);
-    });
-    return errorDiv;
   });
 
-export {renderPictures};
+export {renderPictures, showAlert};
