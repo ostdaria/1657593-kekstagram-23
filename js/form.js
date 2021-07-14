@@ -15,8 +15,6 @@ const userModalCloseForm = document.querySelector('#upload-cancel');
 const userHashtags = document.querySelector('.text__hashtags');
 const userComment = document.querySelector('.text__description');
 const userForm = document.querySelector('.img-upload__form');
-
-// const uploadImageForm = document.querySelector('#upload-select-image');
 const successPopup = document.querySelector('#success').content.querySelector('.success');
 const successButton = successPopup.querySelector('.success__button');
 const errorPopup = document.querySelector('#error').content.querySelector('.error');
@@ -159,7 +157,4 @@ const setUserFormSubmit = () => {
   });
 };
 
-setUserFormSubmit();
-
-
-export {body};
+export {body, setUserFormSubmit};
