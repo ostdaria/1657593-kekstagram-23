@@ -8,9 +8,9 @@ const NUMBER_RANDOM_PICTURES = 10;
 const listPicturesElement = document.querySelector('.pictures');
 const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
 const filtersForm = document.querySelector('.img-filters__form');
-const defaultPicturesButton = filtersForm.querySelector('#filter-default');
-const randomPicturesButton = filtersForm.querySelector('#filter-random');
-const discussedPicturesButton = filtersForm.querySelector('#filter-discussed');
+const filterDefaultButton = filtersForm.querySelector('#filter-default');
+const filterRandomButton = filtersForm.querySelector('#filter-random');
+const filterDiscussedButton = filtersForm.querySelector('#filter-discussed');
 
 
 const renderPicture = (picture) => {
@@ -46,7 +46,7 @@ const generateRandomPicturesArray = (defaultArray) => {
 };
 
 
-const sortPhotosArray = (defaultArray) => {
+const sortPicturesArray = (defaultArray) => {
   const discussedPicturesArray = defaultArray.slice(0);
 
   discussedPicturesArray.sort((a, b) => b.comments.length - a.comments.length);
@@ -80,19 +80,21 @@ getData(
     const photosListFragment = renderPictures(photos, pictureTemplateElement);
     listPicturesElement.appendChild(photosListFragment);
 
+    document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+
     filtersForm.addEventListener('click', (evt) => {
       switch (evt.target.id) {
         case ('filter-default'):
-          filterButtonsClickHandler(randomPicturesButton, discussedPicturesButton, defaultPicturesButton);
+          filterButtonsClickHandler(filterRandomButton, filterDiscussedButton, filterDefaultButton);
           createPictures(photos);
           break;
         case ('filter-random'):
-          filterButtonsClickHandler(defaultPicturesButton, discussedPicturesButton, randomPicturesButton);
+          filterButtonsClickHandler(filterDefaultButton, filterDiscussedButton, filterRandomButton);
           createPictures(generateRandomPicturesArray(photos));
           break;
         case ('filter-discussed'):
-          filterButtonsClickHandler(randomPicturesButton, defaultPicturesButton, discussedPicturesButton);
-          createPictures(sortPhotosArray(photos));
+          filterButtonsClickHandler(filterRandomButton, filterDefaultButton, filterDiscussedButton);
+          createPictures(sortPicturesArray(photos));
           break;
       }
     });
