@@ -1,10 +1,16 @@
-import { getData } from './api.js';
+import {getData} from './api.js';
 import {openBigPicture, onPictureEscKeydown} from './picture-big.js';
+import {debounce, shuffle, showAlert} from './utils.js';
 
-const ALERT_SHOW_TIME = 5000;
+const RERENDER_DELAY = 500;
+const NUMBER_RANDOM_PICTURES = 10;
 
 const listPicturesElement = document.querySelector('.pictures');
 const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
+const filtersForm = document.querySelector('.img-filters__form');
+const filterDefaultButton = filtersForm.querySelector('#filter-default');
+const filterRandomButton = filtersForm.querySelector('#filter-random');
+const filterDiscussedButton = filtersForm.querySelector('#filter-discussed');
 
 
 const renderPicture = (picture) => {
@@ -33,32 +39,66 @@ const renderPictures = (pictures) => {
 };
 
 
-const showAlert = (message) => {
-  const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
-  alertContainer.style.position = 'absolute';
-  alertContainer.style.left = 0;
-  alertContainer.style.top = 0;
-  alertContainer.style.right = 0;
-  alertContainer.style.padding = '10px 10px';
-  alertContainer.style.fontSize = '20px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'red';
+const generateRandomPicturesArray = (defaultArray) => {
+  const newCommentsArray = defaultArray.slice(0);
 
-  alertContainer.textContent = message;
-
-  document.body.append(alertContainer);
-
-  setTimeout(() => {
-    alertContainer.remove();
-  }, ALERT_SHOW_TIME);
+  return shuffle(newCommentsArray).slice(0, NUMBER_RANDOM_PICTURES);
 };
 
 
-getData(
-  (photos) => {
-    const photosListFragment = renderPictures(photos, pictureTemplateElement);
+const sortPicturesArray = (defaultArray) => {
+  const discussedPicturesArray = defaultArray.slice(0);
+
+  discussedPicturesArray.sort((a, b) => b.comments.length - a.comments.length);
+
+  return discussedPicturesArray;
+};
+
+
+const filterButtonsClickHandler = (classRemove, classRemoveSecond, classAdd) => {
+  classRemove.classList.remove('img-filters__button--active');
+  classRemoveSecond.classList.remove('img-filters__button--active');
+  classAdd.classList.add('img-filters__button--active');
+};
+
+
+const createPictures = (debounce(
+  (photosArray) => {
+    listPicturesElement.querySelectorAll('.picture').forEach((photo) => {
+      photo.remove();
+    });
+    const photosListFragment = renderPictures(photosArray, pictureTemplateElement);
+
     listPicturesElement.appendChild(photosListFragment);
+  },
+  RERENDER_DELAY,
+));
+
+
+getData(
+  (data) => {
+    document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+
+    filtersForm.addEventListener('click', (evt) => {
+      switch (evt.target.id) {
+        case ('filter-default'):
+          filterButtonsClickHandler(filterRandomButton, filterDiscussedButton, filterDefaultButton);
+          createPictures(data);
+          break;
+        case ('filter-random'):
+          filterButtonsClickHandler(filterDefaultButton, filterDiscussedButton, filterRandomButton);
+          createPictures(generateRandomPicturesArray(data));
+          break;
+        case ('filter-discussed'):
+          filterButtonsClickHandler(filterRandomButton, filterDefaultButton, filterDiscussedButton);
+          createPictures(sortPicturesArray(data));
+          break;
+      }
+    });
+  },
+  () => {
+    showAlert('Не удалось получить данные с сервера. Попробуйте ещё раз.');
   });
 
-export {renderPictures, showAlert};
+
+export {renderPictures};

@@ -114,9 +114,9 @@ userComment.addEventListener('input', () => {
 });
 
 
-const removeEventListeners = (event) => {
-  document.removeEventListener('click', event);
-  document.removeEventListener('keydown', event);
+const removeEventListeners = (evt) => {
+  document.removeEventListener('click', evt);
+  document.removeEventListener('keydown', evt);
 };
 
 const popupEventsHandler = (evt) => {
