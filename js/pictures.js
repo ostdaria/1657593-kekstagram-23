@@ -1,6 +1,6 @@
 import {getData} from './api.js';
 import {openBigPicture, onPictureEscKeydown} from './picture-big.js';
-import {debounce, shuffle} from './utils.js';
+import {debounce, shuffle, showAlert} from './utils.js';
 
 const RERENDER_DELAY = 500;
 const NUMBER_RANDOM_PICTURES = 10;
@@ -76,28 +76,29 @@ const createPictures = (debounce(
 
 
 getData(
-  (photos) => {
-    const photosListFragment = renderPictures(photos, pictureTemplateElement);
-    listPicturesElement.appendChild(photosListFragment);
-
+  (data) => {
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
 
     filtersForm.addEventListener('click', (evt) => {
       switch (evt.target.id) {
         case ('filter-default'):
           filterButtonsClickHandler(filterRandomButton, filterDiscussedButton, filterDefaultButton);
-          createPictures(photos);
+          createPictures(data);
           break;
         case ('filter-random'):
           filterButtonsClickHandler(filterDefaultButton, filterDiscussedButton, filterRandomButton);
-          createPictures(generateRandomPicturesArray(photos));
+          createPictures(generateRandomPicturesArray(data));
           break;
         case ('filter-discussed'):
           filterButtonsClickHandler(filterRandomButton, filterDefaultButton, filterDiscussedButton);
-          createPictures(sortPicturesArray(photos));
+          createPictures(sortPicturesArray(data));
           break;
       }
     });
+  },
+  () => {
+    showAlert('Не удалось получить данные с сервера. Попробуйте ещё раз.');
   });
+
 
 export {renderPictures};
