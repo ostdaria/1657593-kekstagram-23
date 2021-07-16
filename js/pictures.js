@@ -17,7 +17,7 @@ const renderPicture = (picture) => {
   const pictureElement = pictureTemplateElement.cloneNode(true);
   pictureElement.querySelector('.picture__img').src = picture.url;
   pictureElement.querySelector('.picture__likes').textContent = picture.likes;
-  pictureElement.querySelector('.picture__comments').textContent = picture.comments;
+  pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
 
   pictureElement.addEventListener('click', (evt) => {
     evt.preventDefault();
@@ -39,18 +39,21 @@ const renderPictures = (pictures) => {
 };
 
 
-const generateRandomPicturesArray = (defaultArray) => {
-  const newCommentsArray = defaultArray.slice(0);
+const generateDefaultPictures = (pictures) => {
+  const defaultPictures = pictures.sort((a, b) => a.id > b.id ? 1 : -1);
+  return defaultPictures;
+};
 
+
+const generateRandomPictures = (defaultArray) => {
+  const newCommentsArray = defaultArray.slice(0);
   return shuffle(newCommentsArray).slice(0, NUMBER_RANDOM_PICTURES);
 };
 
 
-const sortPicturesArray = (defaultArray) => {
+const generateDiscussedPictures = (defaultArray) => {
   const discussedPicturesArray = defaultArray.slice(0);
-
   discussedPicturesArray.sort((a, b) => b.comments.length - a.comments.length);
-
   return discussedPicturesArray;
 };
 
@@ -67,9 +70,7 @@ const createPictures = (debounce(
     listPicturesElement.querySelectorAll('.picture').forEach((photo) => {
       photo.remove();
     });
-    const photosListFragment = renderPictures(photosArray, pictureTemplateElement);
-
-    listPicturesElement.appendChild(photosListFragment);
+    renderPictures(photosArray, pictureTemplateElement);
   },
   RERENDER_DELAY,
 ));
@@ -78,20 +79,21 @@ const createPictures = (debounce(
 getData(
   (data) => {
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+    createPictures(data);
 
     filtersForm.addEventListener('click', (evt) => {
       switch (evt.target.id) {
-        case ('filter-default'):
+        case 'filter-default':
           filterButtonsClickHandler(filterRandomButton, filterDiscussedButton, filterDefaultButton);
-          createPictures(data);
+          createPictures(generateDefaultPictures(data));
           break;
-        case ('filter-random'):
+        case 'filter-random':
           filterButtonsClickHandler(filterDefaultButton, filterDiscussedButton, filterRandomButton);
-          createPictures(generateRandomPicturesArray(data));
+          createPictures(generateRandomPictures(data));
           break;
-        case ('filter-discussed'):
+        case 'filter-discussed':
           filterButtonsClickHandler(filterRandomButton, filterDefaultButton, filterDiscussedButton);
-          createPictures(sortPicturesArray(data));
+          createPictures(generateDiscussedPictures(data));
           break;
       }
     });

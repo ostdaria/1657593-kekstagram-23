@@ -2,8 +2,9 @@ import {picturePreview} from './scale-control.js';
 
 const effectValue = document.querySelector('.effect-level__value');
 const sliderElement = document.querySelector('.effect-level__slider');
-const sliderWrapper = document.querySelector('.img-upload__effect-level');
+const sliderWrapperElement = document.querySelector('.img-upload__effect-level');
 const effectsForm = document.querySelector('.img-upload__effects');
+
 
 const effects = {
   'effect-chrome': {
@@ -53,6 +54,7 @@ const effects = {
   },
 };
 
+
 noUiSlider.create(sliderElement, {
   range: {
     min: 0,
@@ -76,12 +78,11 @@ noUiSlider.create(sliderElement, {
 
 
 const showEffect = (effectClass, effectStyle, effectUnit) => {
-  sliderWrapper.classList.remove('visually-hidden');
+  sliderWrapperElement.classList.remove('visually-hidden');
   picturePreview.classList = 'img-upload__preview';
+  picturePreview.classList = '';
   picturePreview.classList.add(`${effectClass}`);
 
-  //события update, которое будет вызвано при изменении положения слайдера,
-  //и выводить в консоль параметры колбека.
   sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
     effectValue.value = unencoded[handle];
     picturePreview.style.filter = `${effectStyle}(${effectValue.value}${effectUnit})`;
@@ -101,12 +102,22 @@ const sliderOptionsHandler = (minValue, maxValue, startValue, stepValue) => {
 };
 
 
+const destroySlider = () => {
+  if (sliderElement.noUiSlider) {
+    sliderElement.noUiSlider.off();
+  }
+  effectValue.value = '';
+  picturePreview.style.filter = '';
+};
+
+
 const onFilterChange = (evt) => {
   const effectId = evt.target.id;
-  if (effectId === 'effect--none') {
+  if (effectId === 'effect-none') {
     picturePreview.classList = 'img-upload__preview';
-    sliderWrapper.classList.add('visually-hidden');
+    sliderWrapperElement.classList.add('visually-hidden');
     picturePreview.style.filter = 'none';
+    destroySlider();
     return;
   }
 

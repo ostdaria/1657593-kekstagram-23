@@ -1,11 +1,11 @@
 import {isEscEvent, isValidString} from './utils.js';
-import {getPictureScale} from './scale-control.js';
+import {getPictureScale, DEFAULT_SCALE_VALUE} from './scale-control.js';
 import {sendData} from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_COMMENT_LENGTH = 140;
-const DEFAULT_SCALE_VALUE = 100;
+
 const re =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
 const body = document.querySelector('body');
@@ -21,7 +21,6 @@ const errorPopup = document.querySelector('#error').content.querySelector('.erro
 const errorButton = errorPopup.querySelector('.error__button');
 
 
-//Записываем обработчик в переменную
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
@@ -31,16 +30,14 @@ const onPopupEscKeydown = (evt) => {
 };
 
 
-//Объявление функции для показа формы
-function openUserModal () {
+const openUserModal = () => {
   formOpen.classList.remove('hidden');
   body.classList.add('modal-open');
-
+  getPictureScale(DEFAULT_SCALE_VALUE);
   document.addEventListener('keydown', onPopupEscKeydown);
-}
+};
 
 
-//Оъявление функции для скрытия формы
 function closeUserModal () {
   userModalOpenForm.value = '';
   userHashtags.value = '';
@@ -48,30 +45,25 @@ function closeUserModal () {
 
   formOpen.classList.add('hidden');
   body.classList.remove('modal-open');
-  getPictureScale(DEFAULT_SCALE_VALUE);
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
 
 
-//в обработчике используем наши функции открытия
 userModalOpenForm.addEventListener('click', () => {
   openUserModal();
 });
 
 
-//В обработчике используем наши функции закрытия
 userModalCloseForm.addEventListener('click', () => {
   closeUserModal();
 });
 
 
-//Праверка хэштегов
-const checkValidHashtags = (evt) => {
+const onCheckValidHashtags = (evt) => {
   evt.preventDefault();
   const hashtagArray = [];
 
-  // //Метод toLowerCase() возвращает значение строки, на которой он был вызван; метод split возращает новый массив
   const hashtags = userHashtags.value.toLowerCase().split(' ');
 
   if (hashtags.length > 5 ) {
@@ -98,10 +90,9 @@ const checkValidHashtags = (evt) => {
   }
 };
 
-userHashtags.addEventListener('input', checkValidHashtags);
+userHashtags.addEventListener('input', onCheckValidHashtags);
 
 
-//Проверка длины комментария
 userComment.addEventListener('input', () => {
   if (isValidString(userComment.value, MAX_COMMENT_LENGTH) === false) {
     userComment.setCustomValidity(`Длина комментария не должна превышать ${MAX_COMMENT_LENGTH} символов`);
@@ -114,47 +105,45 @@ userComment.addEventListener('input', () => {
 });
 
 
-const removeEventListeners = (evt) => {
-  document.removeEventListener('click', evt);
-  document.removeEventListener('keydown', evt);
-};
-
-const popupEventsHandler = (evt) => {
+const onPopupEventsHandler = (evt) => {
   if (isEscEvent(evt)) {
     document.body.lastChild.remove();
-    removeEventListeners(popupEventsHandler);
   } else if (evt.target === document.body.lastChild) {
     document.body.lastChild.remove();
-    removeEventListeners(popupEventsHandler);
+    document.removeEventListener('click', onPopupEventsHandler);
+    document.removeEventListener('keydown', onPopupEventsHandler);
   }
 };
 
-const popupClickHandler = () => {
+
+const onPopupClickHandler = () => {
   document.body.lastChild.remove();
-  removeEventListeners(popupEventsHandler);
 };
 
-const popupOpenHandler = (template, button) => {
+
+const onPopupOpenHandler = (template, button) => {
   closeUserModal();
   document.body.append(template);
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 
-  button.addEventListener('click', popupClickHandler);
-  document.addEventListener('keydown', popupEventsHandler);
-  document.addEventListener('click', popupEventsHandler);
+  button.addEventListener('click', onPopupClickHandler);
+  document.addEventListener('keydown', onPopupEventsHandler);
+  document.addEventListener('click', onPopupEventsHandler);
 };
+
 
 const setUserFormSubmit = () => {
   userForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     sendData(
-      () => popupOpenHandler(successPopup, successButton),
-      () => popupOpenHandler(errorPopup, errorButton),
+      () => onPopupOpenHandler(successPopup, successButton),
+      () => onPopupOpenHandler(errorPopup, errorButton),
       new FormData(evt.target),
     );
   });
 };
+
 
 export {body, setUserFormSubmit};
