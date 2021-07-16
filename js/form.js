@@ -1,11 +1,11 @@
 import {isEscEvent, isValidString} from './utils.js';
-import {getPictureScale} from './scale-control.js';
+import {getPictureScale, DEFAULT_SCALE_VALUE} from './scale-control.js';
 import {sendData} from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_COMMENT_LENGTH = 140;
-const DEFAULT_SCALE_VALUE = 100;
+
 const re =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
 const body = document.querySelector('body');
@@ -35,7 +35,7 @@ const onPopupEscKeydown = (evt) => {
 function openUserModal () {
   formOpen.classList.remove('hidden');
   body.classList.add('modal-open');
-
+  getPictureScale(DEFAULT_SCALE_VALUE);
   document.addEventListener('keydown', onPopupEscKeydown);
 }
 
@@ -48,7 +48,6 @@ function closeUserModal () {
 
   formOpen.classList.add('hidden');
   body.classList.remove('modal-open');
-  getPictureScale(DEFAULT_SCALE_VALUE);
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
@@ -67,7 +66,7 @@ userModalCloseForm.addEventListener('click', () => {
 
 
 //Праверка хэштегов
-const checkValidHashtags = (evt) => {
+const onCheckValidHashtags = (evt) => {
   evt.preventDefault();
   const hashtagArray = [];
 
@@ -98,7 +97,7 @@ const checkValidHashtags = (evt) => {
   }
 };
 
-userHashtags.addEventListener('input', checkValidHashtags);
+userHashtags.addEventListener('input', onCheckValidHashtags);
 
 
 //Проверка длины комментария
@@ -114,44 +113,43 @@ userComment.addEventListener('input', () => {
 });
 
 
-const removeEventListeners = (evt) => {
-  document.removeEventListener('click', evt);
-  document.removeEventListener('keydown', evt);
-};
-
-const popupEventsHandler = (evt) => {
+const onPopupEventsHandler = (evt) => {
   if (isEscEvent(evt)) {
     document.body.lastChild.remove();
-    removeEventListeners(popupEventsHandler);
   } else if (evt.target === document.body.lastChild) {
     document.body.lastChild.remove();
-    removeEventListeners(popupEventsHandler);
   }
 };
 
-const popupClickHandler = () => {
+
+const onPopupClickHandler = () => {
   document.body.lastChild.remove();
-  removeEventListeners(popupEventsHandler);
 };
 
-const popupOpenHandler = (template, button) => {
+
+const onPopupOpenHandler = (template, button) => {
   closeUserModal();
   document.body.append(template);
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 
-  button.addEventListener('click', popupClickHandler);
-  document.addEventListener('keydown', popupEventsHandler);
-  document.addEventListener('click', popupEventsHandler);
+  button.addEventListener('click', onPopupClickHandler);
+  document.addEventListener('keydown', onPopupEventsHandler);
+  document.addEventListener('click', onPopupEventsHandler);
 };
+
+// const onPopupOpenHandler = () {
+//   document.removeEventListener('keydown', onPopupEventsHandler);
+//   document.removeEventListener('click', onPopupEventsHandler);
+// };
 
 const setUserFormSubmit = () => {
   userForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     sendData(
-      () => popupOpenHandler(successPopup, successButton),
-      () => popupOpenHandler(errorPopup, errorButton),
+      () => onPopupOpenHandler(successPopup, successButton),
+      () => onPopupOpenHandler(errorPopup, errorButton),
       new FormData(evt.target),
     );
   });

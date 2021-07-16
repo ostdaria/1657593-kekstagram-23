@@ -1,4 +1,7 @@
-const getData = (onSuccess, onError) => fetch('https://23.javascript.pages.academy/kekstagram/data')
+const URL_GET_DATA = 'https://23.javascript.pages.academy/kekstagram/data';
+const URL_SEND_DATA = 'https://23.javascript.pages.academy/kekstagram';
+
+const getData = (onSuccess, onError) => {fetch(URL_GET_DATA)
   .then((response) => {
     if (response.ok) {
       return response.json();
@@ -9,10 +12,10 @@ const getData = (onSuccess, onError) => fetch('https://23.javascript.pages.acade
   .catch((err) => {
     onError(err);
   });
+};
 
-
-const sendData = (onSuccess, onError, body) =>
-  fetch('https://23.javascript.pages.academy/kekstagram',
+const sendData = (onSuccess, onError, body) => {
+  fetch(URL_SEND_DATA,
     {
       method: 'POST',
       body,
@@ -21,12 +24,13 @@ const sendData = (onSuccess, onError, body) =>
     .then((response) => {
       if(response.ok) {
         onSuccess();
-      } else {
-        onError();
       }
+      throw new Error(`${response.status} — ${response.statusText}`);
     })
     .catch(() => {
       onError();
     });
+};
+
 
 export {getData, sendData};
