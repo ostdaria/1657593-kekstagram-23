@@ -21,7 +21,6 @@ const errorPopup = document.querySelector('#error').content.querySelector('.erro
 const errorButton = errorPopup.querySelector('.error__button');
 
 
-//Записываем обработчик в переменную
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
@@ -31,16 +30,14 @@ const onPopupEscKeydown = (evt) => {
 };
 
 
-//Объявление функции для показа формы
-function openUserModal () {
+const openUserModal = () => {
   formOpen.classList.remove('hidden');
   body.classList.add('modal-open');
   getPictureScale(DEFAULT_SCALE_VALUE);
   document.addEventListener('keydown', onPopupEscKeydown);
-}
+};
 
 
-//Оъявление функции для скрытия формы
 function closeUserModal () {
   userModalOpenForm.value = '';
   userHashtags.value = '';
@@ -53,24 +50,20 @@ function closeUserModal () {
 }
 
 
-//в обработчике используем наши функции открытия
 userModalOpenForm.addEventListener('click', () => {
   openUserModal();
 });
 
 
-//В обработчике используем наши функции закрытия
 userModalCloseForm.addEventListener('click', () => {
   closeUserModal();
 });
 
 
-//Праверка хэштегов
 const onCheckValidHashtags = (evt) => {
   evt.preventDefault();
   const hashtagArray = [];
 
-  // //Метод toLowerCase() возвращает значение строки, на которой он был вызван; метод split возращает новый массив
   const hashtags = userHashtags.value.toLowerCase().split(' ');
 
   if (hashtags.length > 5 ) {
@@ -100,7 +93,6 @@ const onCheckValidHashtags = (evt) => {
 userHashtags.addEventListener('input', onCheckValidHashtags);
 
 
-//Проверка длины комментария
 userComment.addEventListener('input', () => {
   if (isValidString(userComment.value, MAX_COMMENT_LENGTH) === false) {
     userComment.setCustomValidity(`Длина комментария не должна превышать ${MAX_COMMENT_LENGTH} символов`);
@@ -118,6 +110,8 @@ const onPopupEventsHandler = (evt) => {
     document.body.lastChild.remove();
   } else if (evt.target === document.body.lastChild) {
     document.body.lastChild.remove();
+    document.removeEventListener('click', onPopupEventsHandler);
+    document.removeEventListener('keydown', onPopupEventsHandler);
   }
 };
 
@@ -138,10 +132,6 @@ const onPopupOpenHandler = (template, button) => {
   document.addEventListener('click', onPopupEventsHandler);
 };
 
-// const onPopupOpenHandler = () {
-//   document.removeEventListener('keydown', onPopupEventsHandler);
-//   document.removeEventListener('click', onPopupEventsHandler);
-// };
 
 const setUserFormSubmit = () => {
   userForm.addEventListener('submit', (evt) => {
@@ -154,5 +144,6 @@ const setUserFormSubmit = () => {
     );
   });
 };
+
 
 export {body, setUserFormSubmit};

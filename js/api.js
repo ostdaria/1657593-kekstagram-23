@@ -8,10 +8,8 @@ const getData = (onSuccess, onError) => {fetch(URL_GET_DATA)
     }
     throw new Error(`${response.status} — ${response.statusText}`);
   })
-  .then((data) => onSuccess(data))
-  .catch((err) => {
-    onError(err);
-  });
+  .then(onSuccess)
+  .catch(onError);
 };
 
 const sendData = (onSuccess, onError, body) => {

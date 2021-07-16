@@ -5,6 +5,7 @@ const sliderElement = document.querySelector('.effect-level__slider');
 const sliderWrapperElement = document.querySelector('.img-upload__effect-level');
 const effectsForm = document.querySelector('.img-upload__effects');
 
+
 const effects = {
   'effect-chrome': {
     name: 'grayscale',
@@ -53,6 +54,7 @@ const effects = {
   },
 };
 
+
 noUiSlider.create(sliderElement, {
   range: {
     min: 0,
@@ -81,8 +83,6 @@ const showEffect = (effectClass, effectStyle, effectUnit) => {
   picturePreview.classList = '';
   picturePreview.classList.add(`${effectClass}`);
 
-  //события update, которое будет вызвано при изменении положения слайдера,
-  //и выводить в консоль параметры колбека.
   sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
     effectValue.value = unencoded[handle];
     picturePreview.style.filter = `${effectStyle}(${effectValue.value}${effectUnit})`;
@@ -105,7 +105,6 @@ const sliderOptionsHandler = (minValue, maxValue, startValue, stepValue) => {
 const destroySlider = () => {
   if (sliderElement.noUiSlider) {
     sliderElement.noUiSlider.off();
-    sliderElement.noUiSlider.destroy();
   }
   effectValue.value = '';
   picturePreview.style.filter = '';
@@ -114,7 +113,7 @@ const destroySlider = () => {
 
 const onFilterChange = (evt) => {
   const effectId = evt.target.id;
-  if (effectId === 'effect--none') {
+  if (effectId === 'effect-none') {
     picturePreview.classList = 'img-upload__preview';
     sliderWrapperElement.classList.add('visually-hidden');
     picturePreview.style.filter = 'none';

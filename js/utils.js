@@ -7,21 +7,19 @@ const isValidString = (string, maxLength) => string.length <= maxLength;
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 
-function debounce (callback, timeoutDelay = 500) {
+const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
-
   return (...rest) => {
     clearTimeout(timeoutId);
 
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-}
+};
 
 
 const shuffle = (pictures) => {
   for (let i = pictures.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-
     [pictures[i], pictures[j]] = [pictures[j], pictures[i]];
   }
   return pictures;
@@ -41,7 +39,6 @@ const showAlert = (message) => {
   alertContainer.style.backgroundColor = 'red';
 
   alertContainer.textContent = message;
-
   document.body.append(alertContainer);
 
   setTimeout(() => {

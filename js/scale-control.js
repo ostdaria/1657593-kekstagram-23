@@ -10,11 +10,13 @@ const picturePreview = document.querySelector('.img-upload__preview img');
 
 let currentScale = 100;
 
+
 const getPictureScale = (value) => {
   scaleValue.value = `${value}%`;
   picturePreview.style.transform = `scale(${value / 100})`;
   currentScale = value;
 };
+
 
 const onMinusButtonClickHandler = () => {
   if (currentScale > MIN_SCALE) {
@@ -23,12 +25,14 @@ const onMinusButtonClickHandler = () => {
   }
 };
 
+
 const onPlusButtonClickHandler = () => {
   if (currentScale < MAX_SCALE) {
     currentScale += SCALE_STEP;
     getPictureScale(currentScale);
   }
 };
+
 
 minusButton.addEventListener('click', onMinusButtonClickHandler);
 plusButton.addEventListener('click', onPlusButtonClickHandler);

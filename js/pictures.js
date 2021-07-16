@@ -51,7 +51,7 @@ const generateRandomPictures = (defaultArray) => {
 };
 
 
-const generateDiscussedPictures= (defaultArray) => {
+const generateDiscussedPictures = (defaultArray) => {
   const discussedPicturesArray = defaultArray.slice(0);
   discussedPicturesArray.sort((a, b) => b.comments.length - a.comments.length);
   return discussedPicturesArray;
@@ -65,36 +65,35 @@ const filterButtonsClickHandler = (classRemove, classRemoveSecond, classAdd) => 
 };
 
 
-// const createPictures = (debounce(
-//   (photosArray) => {
-//     listPicturesElement.querySelectorAll('.picture').forEach((photo) => {
-//       photo.remove();
-//     });
-//     const photosListFragment = renderPictures(photosArray, pictureTemplateElement);
-
-//     listPicturesElement.appendChild(photosListFragment);
-//   },
-//   RERENDER_DELAY,
-// ));
+const createPictures = (debounce(
+  (photosArray) => {
+    listPicturesElement.querySelectorAll('.picture').forEach((photo) => {
+      photo.remove();
+    });
+    renderPictures(photosArray, pictureTemplateElement);
+  },
+  RERENDER_DELAY,
+));
 
 
 getData(
   (data) => {
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+    createPictures(data);
 
     filtersForm.addEventListener('click', (evt) => {
       switch (evt.target.id) {
         case 'filter-default':
           filterButtonsClickHandler(filterRandomButton, filterDiscussedButton, filterDefaultButton);
-          renderPictures(generateDefaultPictures(data));
+          createPictures(generateDefaultPictures(data));
           break;
         case 'filter-random':
           filterButtonsClickHandler(filterDefaultButton, filterDiscussedButton, filterRandomButton);
-          renderPictures(generateRandomPictures(data));
+          createPictures(generateRandomPictures(data));
           break;
         case 'filter-discussed':
           filterButtonsClickHandler(filterRandomButton, filterDefaultButton, filterDiscussedButton);
-          renderPictures(generateDiscussedPictures(data));
+          createPictures(generateDiscussedPictures(data));
           break;
       }
     });

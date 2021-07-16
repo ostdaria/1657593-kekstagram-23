@@ -50,7 +50,7 @@ const showInitialCommentsArray = (commentsArray) => {
 };
 
 
-const renderMoreCommentsFragment = () => {
+const onRenderMoreCommentsFragment = () => {
   const additionalCommentsArray = currentComments.slice(commentsList.children.length, commentsList.children.length + COMMENTS_LOAD_STEP);
 
   commentsList.appendChild(renderCommentsList(additionalCommentsArray, commentTemplate));
@@ -84,7 +84,7 @@ const openBigPicture = (data) => {
 
 
   document.addEventListener('keydown', onPictureEscKeydown);
-  commentsLoader.addEventListener('click', renderMoreCommentsFragment);
+  commentsLoader.addEventListener('click', onRenderMoreCommentsFragment);
   showInitialCommentsArray(data.comments);
 };
 
@@ -94,7 +94,7 @@ function closeBigPicture () {
   body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onPictureEscKeydown);
-  commentsLoader.removeEventListener('click', renderMoreCommentsFragment);
+  commentsLoader.removeEventListener('click', onRenderMoreCommentsFragment);
 }
 
 
