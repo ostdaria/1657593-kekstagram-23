@@ -37,6 +37,13 @@ const renderCommentsList = (comments, template) => {
 };
 
 
+const removeComments = () => {
+  bigPicture.querySelectorAll('.social__comment').forEach((element) => {
+    element.remove();
+  });
+};
+
+
 const showInitialCommentsArray = (commentsArray) => {
 
   const initialCommentsArray = commentsArray.slice(0, COMMENTS_LOAD_STEP);
@@ -70,7 +77,7 @@ const onPictureEscKeydown = (evt) => {
 };
 
 
-const openBigPicture = (data) => {
+const generateBigPicture = (data) => {
   bigPictureImage.src = data.url;
   bigPictureLikesCount.textContent = data.likes;
   bigPictureCommentCount.textContent = data.comments.length;
@@ -78,11 +85,6 @@ const openBigPicture = (data) => {
 
   commentsList.innerHTML = '';
   currentComments = data.comments;
-
-  bigPicture.classList.remove('hidden');
-  body.classList.add('modal-open');
-
-
   document.addEventListener('keydown', onPictureEscKeydown);
   commentsLoader.addEventListener('click', onRenderMoreCommentsFragment);
   showInitialCommentsArray(data.comments);
@@ -94,13 +96,39 @@ function closeBigPicture () {
   body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onPictureEscKeydown);
+  commentsLoader.classList.remove('hidden');
   commentsLoader.removeEventListener('click', onRenderMoreCommentsFragment);
 }
 
 
-bigPictureButtonClose.addEventListener('click', () => {
+const pictureKeydownHandler = (evt) => {
+  if (isEscEvent(evt)) {
+    evt.preventDefault();
+    closeBigPicture();
+    document.removeEventListener('keydown', pictureKeydownHandler);
+  }
+};
+
+
+const pictureOpenHandler = (dataObject) => {
+  removeComments();
+  generateBigPicture(dataObject);
+  bigPicture.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+
+  document.addEventListener('keydown', pictureKeydownHandler);
+};
+
+
+const pictureCloseHandler = () => {
   closeBigPicture();
+  document.removeEventListener('keydown', pictureKeydownHandler);
+};
+
+
+bigPictureButtonClose.addEventListener('click', () => {
+  pictureCloseHandler();
 });
 
 
-export {openBigPicture, closeBigPicture, bigPictureButtonClose, onPictureEscKeydown};
+export {pictureOpenHandler, closeBigPicture, bigPictureButtonClose, onPictureEscKeydown};
