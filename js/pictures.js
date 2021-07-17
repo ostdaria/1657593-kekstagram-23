@@ -1,5 +1,5 @@
 import {getData} from './api.js';
-import {openBigPicture, onPictureEscKeydown} from './picture-big.js';
+import {pictureOpenHandler} from './picture-big.js';
 import {debounce, shuffle, showAlert} from './utils.js';
 
 const RERENDER_DELAY = 500;
@@ -21,7 +21,7 @@ const renderPicture = (picture) => {
 
   pictureElement.addEventListener('click', (evt) => {
     evt.preventDefault();
-    openBigPicture(picture, onPictureEscKeydown);
+    pictureOpenHandler(picture);
   });
 
   return pictureElement;

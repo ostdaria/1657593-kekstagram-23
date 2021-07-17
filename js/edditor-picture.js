@@ -103,6 +103,9 @@ const sliderOptionsHandler = (minValue, maxValue, startValue, stepValue) => {
 
 
 const destroySlider = () => {
+  picturePreview.classList = 'img-upload__preview';
+  sliderWrapperElement.classList.add('visually-hidden');
+  picturePreview.style.filter = 'none';
   if (sliderElement.noUiSlider) {
     sliderElement.noUiSlider.off();
   }
@@ -128,4 +131,7 @@ const onFilterChange = (evt) => {
   }
 };
 
+
 effectsForm.addEventListener('click', onFilterChange);
+
+export {destroySlider};
