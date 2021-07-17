@@ -10,8 +10,8 @@ const re =  /^#[a-zA-Zа-яА-я0-9]{1,19}$/;
 
 const body = document.querySelector('body');
 const formOpen = document.querySelector('.img-upload__overlay');
-const userModalOpenForm = document.querySelector('#upload-file');
-const userModalCloseForm = document.querySelector('#upload-cancel');
+const userModalOpenForm = document.querySelector('.img-upload__input');
+const userModalCloseForm = document.querySelector('.img-upload__cancel');
 const userHashtags = document.querySelector('.text__hashtags');
 const userComment = document.querySelector('.text__description');
 const userForm = document.querySelector('.img-upload__form');
