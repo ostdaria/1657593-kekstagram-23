@@ -101,11 +101,11 @@ function closeBigPicture () {
 }
 
 
-const pictureKeydownHandler = (evt) => {
+const onPictureKeydownHandler = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
     closeBigPicture();
-    document.removeEventListener('keydown', pictureKeydownHandler);
+    document.removeEventListener('keydown', onPictureKeydownHandler);
   }
 };
 
@@ -116,13 +116,13 @@ const pictureOpenHandler = (dataObject) => {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
-  document.addEventListener('keydown', pictureKeydownHandler);
+  document.addEventListener('keydown', onPictureKeydownHandler);
 };
 
 
 const pictureCloseHandler = () => {
   closeBigPicture();
-  document.removeEventListener('keydown', pictureKeydownHandler);
+  document.removeEventListener('keydown', onPictureKeydownHandler);
 };
 
 
