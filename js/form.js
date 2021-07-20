@@ -1,6 +1,8 @@
 import {isEscEvent, isValidString} from './utils.js';
 import {getPictureScale, DEFAULT_SCALE_VALUE} from './scale-control.js';
 import {sendData} from './api.js';
+import {destroySlider} from './edditor-picture.js';
+
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
@@ -23,9 +25,13 @@ const errorButton = errorPopup.querySelector('.error__button');
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
-    evt.preventDefault();
-    closeUserModal();
-    document.removeEventListener('keydown', onPopupEscKeydown);
+    if (userHashtags === document.activeElement || userComment === document.activeElement) {
+      evt.preventDefault();
+    } else {
+      userForm.reset();
+      closeUserModal();
+      document.removeEventListener('keydown', onPopupEscKeydown);
+    }
   }
 };
 
@@ -35,6 +41,7 @@ const openUserModal = () => {
   body.classList.add('modal-open');
   getPictureScale(DEFAULT_SCALE_VALUE);
   document.addEventListener('keydown', onPopupEscKeydown);
+  destroySlider();
 };
 
 
@@ -50,7 +57,7 @@ function closeUserModal () {
 }
 
 
-userModalOpenForm.addEventListener('click', () => {
+userModalOpenForm.addEventListener('change', () => {
   openUserModal();
 });
 
@@ -62,7 +69,7 @@ userModalCloseForm.addEventListener('click', () => {
 
 const onCheckValidHashtags = (evt) => {
   evt.preventDefault();
-  const hashtagArray = [];
+  const hashtagsArray = [];
 
   const hashtags = userHashtags.value.toLowerCase().split(' ');
 
@@ -81,10 +88,10 @@ const onCheckValidHashtags = (evt) => {
       userHashtags.setCustomValidity('Неверный параметр');
     } else if (hashtags[i].length > 20) {
       userHashtags.setCustomValidity(`Максимальная длина одного хэштега ${MAX_HASHTAG_LENGTH} символов, включая решётку`);
-    } else if (hashtagArray.includes(hashtags[i])) {
+    } else if (hashtagsArray.includes(hashtags[i])) {
       userHashtags.setCustomValidity('Один и тот же хэштег не может быть использован дважды. Хэштеги нечувствительны к регистру');
-    } else if (!hashtagArray.includes(hashtags[i])) {
-      hashtagArray.push(hashtags[i]);
+    } else if (!hashtagsArray.includes(hashtags[i])) {
+      hashtagsArray.push(hashtags[i]);
     } else {userHashtags.setCustomValidity('');}
     userHashtags.reportValidity();
   }
@@ -110,8 +117,6 @@ const onPopupEventsHandler = (evt) => {
     document.body.lastChild.remove();
   } else if (evt.target === document.body.lastChild) {
     document.body.lastChild.remove();
-    document.removeEventListener('click', onPopupEventsHandler);
-    document.removeEventListener('keydown', onPopupEventsHandler);
   }
 };
 
@@ -119,6 +124,10 @@ const onPopupEventsHandler = (evt) => {
 const onPopupClickHandler = () => {
   document.body.lastChild.remove();
 };
+
+
+document.removeEventListener('click', onPopupClickHandler);
+document.removeEventListener('keydown', onPopupEventsHandler);
 
 
 const onPopupOpenHandler = (template, button) => {
@@ -129,7 +138,7 @@ const onPopupOpenHandler = (template, button) => {
 
   button.addEventListener('click', onPopupClickHandler);
   document.addEventListener('keydown', onPopupEventsHandler);
-  document.addEventListener('click', onPopupEventsHandler);
+  document.addEventListener('click', onPopupClickHandler);
 };
 
 
