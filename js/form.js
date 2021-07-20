@@ -138,7 +138,7 @@ const onPopupOpenHandler = (template, button) => {
 
   button.addEventListener('click', onPopupClickHandler);
   document.addEventListener('keydown', onPopupEventsHandler);
-  document.addEventListener('click', onPopupEventsHandler);
+  document.addEventListener('click', onPopupClickHandler);
 };
 
 
@@ -147,8 +147,8 @@ const setUserFormSubmit = () => {
     evt.preventDefault();
 
     sendData(
-      () => onPopupOpenHandler(errorPopup, errorButton),
       () => onPopupOpenHandler(successPopup, successButton),
+      () => onPopupOpenHandler(errorPopup, errorButton),
       new FormData(evt.target),
     );
   });

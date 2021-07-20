@@ -21,7 +21,7 @@ const sendData = (onSuccess, onError, body) => {
   )
     .then((response) => {
       if(response.ok) {
-        onSuccess();
+        return onSuccess();
       }
       throw new Error(`${response.status} — ${response.statusText}`);
     })
